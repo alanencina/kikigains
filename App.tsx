@@ -86,7 +86,7 @@ const AuthenticatedApp: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-hidden p-0 md:p-4 md:gap-4 animate-in fade-in duration-700 relative">
+    <div className="flex min-h-screen md:h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white md:overflow-hidden overflow-x-hidden p-0 md:p-4 md:gap-4 animate-in fade-in duration-700 relative">
       <Sidebar
         currentView={currentView}
         onNavigate={setCurrentView}
@@ -94,7 +94,7 @@ const AuthenticatedApp: React.FC = () => {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <main className="flex-1 h-full overflow-y-auto custom-scrollbar md:pl-0 md:rounded-2xl">
+      <main className="flex-1 w-full md:h-full md:overflow-y-auto custom-scrollbar md:pl-0 md:rounded-2xl">
         {/* Mobile Header */}
         <div className="md:hidden sticky top-0 z-30 bg-background-dark/80 backdrop-blur-md border-b border-white/10 px-4 py-3 flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
