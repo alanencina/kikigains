@@ -20,6 +20,7 @@ const AuthenticatedApp: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [initialPlan, setInitialPlan] = useState<string>('');
   const [isFloatingChatOpen, setIsFloatingChatOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   if (loading) {
     return (
@@ -85,21 +86,43 @@ const AuthenticatedApp: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-hidden p-4 md:gap-4 animate-in fade-in duration-700 relative">
-      <Sidebar currentView={currentView} onNavigate={setCurrentView} />
+    <div className="flex h-screen bg-background-light dark:bg-background-dark text-slate-900 dark:text-white overflow-hidden p-0 md:p-4 md:gap-4 animate-in fade-in duration-700 relative">
+      <Sidebar
+        currentView={currentView}
+        onNavigate={setCurrentView}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
 
-      <main className="flex-1 h-full overflow-y-auto custom-scrollbar md:pl-0 rounded-2xl">
-        <div className="max-w-[1400px] mx-auto min-h-full">
+      <main className="flex-1 h-full overflow-y-auto custom-scrollbar md:pl-0 md:rounded-2xl">
+        {/* Mobile Header */}
+        <div className="md:hidden sticky top-0 z-30 bg-background-dark/80 backdrop-blur-md border-b border-white/10 px-4 py-3 flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 -ml-2 text-white hover:bg-white/10 rounded-full transition-colors"
+            >
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+            <h1 className="text-white font-bold text-lg tracking-tight">KikiGains</h1>
+          </div>
+
+          <div className="size-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-xs">
+            {userProfile?.name?.charAt(0) || 'U'}
+          </div>
+        </div>
+
+        <div className="max-w-[1400px] mx-auto min-h-full px-4 md:px-0 pb-20 md:pb-0">
           {renderContent()}
         </div>
       </main>
 
       {/* Floating AI Chat Button & Widget */}
       {currentView !== AppView.AI_COACH && (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 pointer-events-none">
+        <div className="fixed bottom-6 right-6 z-30 flex flex-col items-end gap-4 pointer-events-none">
 
           {isFloatingChatOpen && (
-            <div className="pointer-events-auto w-[350px] h-[500px] shadow-2xl rounded-2xl overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-300">
+            <div className="pointer-events-auto w-[calc(100vw-3rem)] md:w-[350px] h-[500px] shadow-2xl rounded-2xl overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-300">
               <ChatBot
                 userName={userProfile?.name}
                 variant="widget"
@@ -118,7 +141,7 @@ const AuthenticatedApp: React.FC = () => {
 
             {/* Tooltip */}
             {!isFloatingChatOpen && (
-              <span className="absolute right-16 px-3 py-1 bg-surface-dark text-white text-xs font-bold rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+              <span className="absolute right-16 px-3 py-1 bg-surface-dark text-white text-xs font-bold rounded-lg border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none hidden md:block">
                 Hablar con Entrenador IA
               </span>
             )}
@@ -128,6 +151,7 @@ const AuthenticatedApp: React.FC = () => {
     </div>
   );
 };
+
 
 const App: React.FC = () => {
   return (
